@@ -7,7 +7,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://matchstick135.github.io/img/2024-5-1.jpg">
 <meta property="article:published_time" content="2024-04-30T16:00:00.000Z">
-<meta property="article:modified_time" content="2024-12-31T07:45:06.054Z">
+<meta property="article:modified_time" content="2025-01-11T08:33:25.286Z">
 <meta property="article:author" content="Ms135">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://matchstick135.github.io/img/2024-5-1.jpg"><link rel="shortcut icon" href="/img/%E5%A4%B4%E5%83%8F.jpg"><link rel="canonical" href="https://matchstick135.github.io/2024/05/01/2024-5-1%20%E5%B8%B8%E8%A7%81%E4%BF%9D%E6%8A%A4%E6%89%8B%E6%AE%B5/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
@@ -218,7 +218,11 @@
 <li>程序扔进调试器，运行至 ResumeThread()，单步步过。此时异常触发，当前调试器 作为JIT调试器，被系统自动调用，附加到子进程上</li>
 <li>将”CC“处复原</li>
 </ol>
-<h2 id="天堂之门"><a href="#天堂之门" class="headerlink" title="天堂之门"></a>天堂之门</h2><p>原理：<br>利用Windows的WoW64子系统机制<br>WoW64下，32位程序在加载32位dll的同时，也加载64位dll；64位dll中，wow64.dll，wow64win.dll，wow64cpu.dll负责环境转换，ntdll.dll负责最终与内核交互。可以说，x86环境是WoW64”模拟”出来的.对于x86程序，woW64就相当于其内核<br><img src="/img/2024-5-1/5.jpg"></p>
+<h2 id="天堂之门"><a href="#天堂之门" class="headerlink" title="天堂之门"></a>天堂之门</h2><p>原理：</p>
+<ol>
+<li>Windows机制————WoW64子系统<br>WoW64下，32位程序在加载32位dll的同时，也加载64位dll；64位dll中，wow64.dll，wow64win.dll，wow64cpu.dll负责环境转换，ntdll.dll负责最终与内核交互。可以说，x86环境是WoW64”模拟”出来的.对于x86程序，woW64就相当于其内核</li>
+<li>CPU工作模式————长模式<br><img src="/img/2024-5-1/37.png"><br>因此在汇编层面通常会具有如下表现<br><img src="/img/2024-5-1/5.jpg"></li>
+</ol>
 <p>对抗：<br>dump出异架构下的机器码，单独分析逻辑<br>可使用Capstone等工具查看反汇编</p>
 <h2 id="Debug-Blocker"><a href="#Debug-Blocker" class="headerlink" title="Debug Blocker"></a>Debug Blocker</h2><p>原理：<br>Windows下————</p>
 <ol>
