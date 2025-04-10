@@ -1,0 +1,187 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>软件系统安全 2025 HappyLock | Ms135's Blog</title><meta name="author" content="Ms135"><meta name="copyright" content="Ms135"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="题目解题过程MainActivity扔进jadx查看 MainActivity类 反编译代码非常奇怪，与之对应的是一些代码混淆————  字符串混淆对Base64编码下的字符串进行解密  控制流平坦化查看smali，看到冗长的switch、case   目光转到 onComplete()————其中是获取用户绘制的图案锁序列，加密后验证结果。重点在于调用了 Utils.cmp() Utils先看">
+<meta property="og:type" content="article">
+<meta property="og:title" content="软件系统安全 2025 HappyLock">
+<meta property="og:url" content="https://matchstick135.github.io/2025/01/24/2025-1-24%20%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8%202025%20HappyLock/index.html">
+<meta property="og:site_name" content="Ms135&#39;s Blog">
+<meta property="og:description" content="题目解题过程MainActivity扔进jadx查看 MainActivity类 反编译代码非常奇怪，与之对应的是一些代码混淆————  字符串混淆对Base64编码下的字符串进行解密  控制流平坦化查看smali，看到冗长的switch、case   目光转到 onComplete()————其中是获取用户绘制的图案锁序列，加密后验证结果。重点在于调用了 Utils.cmp() Utils先看">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://matchstick135.github.io/img/2025-1-24.jpg">
+<meta property="article:published_time" content="2025-01-23T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-03-15T10:35:13.709Z">
+<meta property="article:author" content="Ms135">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://matchstick135.github.io/img/2025-1-24.jpg"><link rel="shortcut icon" href="/img/%E5%A4%B4%E5%83%8F.jpg"><link rel="canonical" href="https://matchstick135.github.io/2025/01/24/2025-1-24%20%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8%202025%20HappyLock/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":5,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '软件系统安全 2025 HappyLock',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/背景.jpg);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/%E5%A4%B4%E5%83%8F.jpg" onerror="onerror=null;src='null'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">41</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/2025-1-24.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Ms135's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">软件系统安全 2025 HappyLock</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">软件系统安全 2025 HappyLock</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2025-01-23T16:00:00.000Z" title="发表于 2025-01-24 00:00:00">2025-01-24</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%80%86%E5%90%91%E6%97%A5%E8%AE%B0/">逆向日记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">956</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h1><h1 id="解题过程"><a href="#解题过程" class="headerlink" title="解题过程"></a>解题过程</h1><h2 id="MainActivity"><a href="#MainActivity" class="headerlink" title="MainActivity"></a>MainActivity</h2><p>扔进jadx查看 MainActivity类</p>
+<p>反编译代码非常奇怪，与之对应的是一些代码混淆————</p>
+<ol>
+<li><p>字符串混淆<br>对Base64编码下的字符串进行解密<br><img src="/img/2025-1-24/1.png"></p>
+</li>
+<li><p>控制流平坦化<br>查看smali，看到冗长的switch、case<br><img src="/img/2025-1-24/2.png"></p>
+</li>
+</ol>
+<p>目光转到 onComplete()————<br>其中是获取用户绘制的图案锁序列，加密后验证结果。重点在于调用了 Utils.cmp()<br><img src="/img/2025-1-24/3.png"></p>
+<h2 id="Utils"><a href="#Utils" class="headerlink" title="Utils"></a>Utils</h2><p>先看 唯一正常反编译的cmp()————<br>其中通过反射调用了某个已加载的类的 cmp方法（”Y21w”）<br><img src="/img/2025-1-24/4.png"></p>
+<p>剩下就是零零散散的，但结合上方逻辑不难推出，这里对类进行了解密并动态加载<br><img src="/img/2025-1-24/5.png"></p>
+<p>因此要想办法把这里的dex dump出来。<br>有很多种方式，但从省事的角度考虑，这里还是选择直接hook decode()</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Java</span>.<span class="title function_">perform</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="title class_">Utils</span> = <span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;com.crackme.happylock.Utils&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="title class_">Utils</span>.<span class="property">decode</span>.<span class="title function_">overload</span>(<span class="string">&#x27;[B&#x27;</span>).<span class="property">implementation</span> = <span class="keyword">function</span> (<span class="params">inputData</span>) &#123;</span><br><span class="line">        <span class="keyword">let</span> result = <span class="variable language_">this</span>.<span class="title function_">decode</span>(inputData);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (result <span class="keyword">instanceof</span> <span class="title class_">Java</span>.<span class="title function_">array</span>(<span class="string">&#x27;byte&#x27;</span>)) &#123;</span><br><span class="line">            <span class="keyword">let</span> filePath = <span class="string">&#x27;C:\\Users\\xxx\\Desktop\\dump.dex&#x27;</span>;</span><br><span class="line">            <span class="keyword">let</span> fos = <span class="title class_">Java</span>.<span class="title function_">use</span>(<span class="string">&quot;java.io.FileOutputStream&quot;</span>);</span><br><span class="line">            <span class="keyword">let</span> fileOutputStream = <span class="keyword">new</span> <span class="title function_">fos</span>(filePath, <span class="literal">false</span>);</span><br><span class="line">            fileOutputStream.<span class="title function_">write</span>(result);</span><br><span class="line">            fileOutputStream.<span class="title function_">close</span>();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="Check"><a href="#Check" class="headerlink" title="Check"></a>Check</h2><p>dump.dex扔进jeb，看到Check类里只有一个native check()，并没有看到预期的cmp()<br><img src="/img/2025-1-24/7.png"></p>
+<p>到这里还是很蒙，但事已至此只能跟进native层了</p>
+<h2 id="libhappylock-so"><a href="#libhappylock-so" class="headerlink" title="libhappylock.so"></a>libhappylock.so</h2><p>.init_array中————<br>看到许多解密逻辑，解密后被传入 __android_log_print()等位置，所以可以大致确定是对字符串混淆的解密<br><img src="/img/2025-1-24/8.png"></p>
+<p>JNI_OnLoad()中————<br>并未发现常规的 JNI::FindClass()、JNI::RegisterNatives()，但是发现了一个可疑函数的调用<br><img src="/img/2025-1-24/6.png"></p>
+<p>于是hook 查看参数</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> libhappylockBase = <span class="title class_">Process</span>.<span class="title function_">findModuleByName</span>(<span class="string">&quot;libhappylock.so&quot;</span>).<span class="property">base</span>;</span><br><span class="line"></span><br><span class="line"><span class="title class_">Interceptor</span>.<span class="title function_">attach</span>(libhappylockBase.<span class="title function_">add</span>(<span class="number">0x12830</span>), &#123;</span><br><span class="line">    <span class="attr">onEnter</span>: <span class="keyword">function</span> (<span class="params">args</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; args.<span class="property">length</span>; i++) &#123;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`  arg<span class="subst">$&#123;i&#125;</span>: <span class="subst">$&#123;args[i]&#125;</span>`</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">onLeave</span>: <span class="keyword">function</span> (<span class="params">retval</span>) &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>发现两次调用 操作的目标先后是 libc.so的 execve()，以及 libart.so的 ClassLinker::LoadMethod()</p>
+<p>还是不明所以，正好前面 0x127BC处有看到 __android_log_print()，查看一手日志<br>然而很奇怪，logcat中没看到什么输出，因此hook查看此处 __android_log_print()的传参</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="title class_">Java</span>.<span class="title function_">perform</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> libhappylock = <span class="title class_">Process</span>.<span class="title function_">findModuleByName</span>(<span class="string">&quot;libhappylock.so&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> targetOffset = <span class="number">0x127BC</span>;</span><br><span class="line">    <span class="keyword">var</span> targetAddress = libhappylock.<span class="property">base</span>.<span class="title function_">add</span>(targetOffset);</span><br><span class="line"></span><br><span class="line">    <span class="title class_">Interceptor</span>.<span class="title function_">attach</span>(targetAddress, &#123;</span><br><span class="line">        <span class="attr">onEnter</span>: <span class="keyword">function</span> (<span class="params">args</span>) &#123;</span><br><span class="line">            <span class="keyword">var</span> prio = args[<span class="number">0</span>].<span class="title function_">toInt32</span>();  </span><br><span class="line">            <span class="keyword">var</span> tagPtr = args[<span class="number">1</span>];          </span><br><span class="line">            <span class="keyword">var</span> msgPtr = args[<span class="number">2</span>];        </span><br><span class="line"></span><br><span class="line">            <span class="keyword">var</span> tag = <span class="title class_">Memory</span>.<span class="title function_">readUtf8String</span>(tagPtr);</span><br><span class="line">            <span class="keyword">var</span> message = <span class="title class_">Memory</span>.<span class="title function_">readUtf8String</span>(msgPtr);</span><br><span class="line"></span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Log Priority: &#x27;</span> + prio);</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Tag: &#x27;</span> + tag);</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Message: &#x27;</span> + message);</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">onLeave</span>: <span class="keyword">function</span> (<span class="params">retval</span>) &#123;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>看到了输出中带有”shadowhook”的字样，这下一切都串联起来了————</p>
+<ol>
+<li>native层通过shadowhook框架，先后hook了 execve()、LoadMethod()<br><img src="/img/2025-1-24/9.png"></li>
+<li>对这两个函数的hook，非常契合dex第三代壳 指令抽取壳的特征。<br>hook跳转到的函数 sub_121E4、sub_12270的功能，也恰恰印证了这一点。<br>分别是在进行 dex2oat禁用、原指令回填的操作<br><img src="/img/2025-1-24/10.png"></li>
+<li>这也是一开始java层 dump出的Check类，没见到预期cmp()的原因。<br>因为此时该方法还是处于指令被抽取的状态<br><img src="/img/2025-1-24/7.png"></li>
+</ol>
+<p>所以接下来目标就很明确了，从内存中dump出指令回填后的dex</p>
+<h2 id="Check-fixed"><a href="#Check-fixed" class="headerlink" title="Check (fixed)"></a>Check (fixed)</h2><p>此时再在jeb中查看dump.dex，就可以如愿以偿看到cmp()逻辑了<br><img src="/img/2025-1-24/11.png"></p>
+<p>由此得到exp</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">encrypted = [</span><br><span class="line">    <span class="number">0x76</span>, <span class="number">0x11</span>, <span class="number">0x02</span>, <span class="number">0x50</span>, <span class="number">0x09</span>, <span class="number">0x7D</span>, <span class="number">0x06</span>, <span class="number">0x16</span>, <span class="number">0x71</span>, <span class="number">0x42</span>, <span class="number">0x00</span>, <span class="number">0x51</span>, <span class="number">0x5E</span>, <span class="number">0x29</span>, <span class="number">0x57</span>, <span class="number">0x14</span>,</span><br><span class="line">    <span class="number">0x7A</span>, <span class="number">0x41</span>, <span class="number">0x58</span>, <span class="number">0x05</span>, <span class="number">0x5E</span>, <span class="number">0x29</span>, <span class="number">0x07</span>, <span class="number">0x13</span>, <span class="number">0x76</span>, <span class="number">0x16</span>, <span class="number">0x03</span>, <span class="number">0x02</span>, <span class="number">0x5A</span>, <span class="number">0x29</span>, <span class="number">0x57</span>, <span class="number">0x47</span>,</span><br><span class="line">    <span class="number">0x75</span>, <span class="number">0x44</span>, <span class="number">0x04</span>, <span class="number">0x07</span>, <span class="number">0x5F</span>, <span class="number">0x74</span>, <span class="number">0x04</span>, <span class="number">0x43</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">key = <span class="string">b&quot;CrackMe!CrackMe!&quot;</span></span><br><span class="line"></span><br><span class="line">decrypted = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(encrypted)):</span><br><span class="line">    decrypted_byte = encrypted[i] ^ key[i % <span class="built_in">len</span>(key)]</span><br><span class="line">    decrypted.append(decrypted_byte)</span><br><span class="line"></span><br><span class="line">decrypted_text = <span class="built_in">bytes</span>(decrypted).decode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(decrypted_text)   <span class="comment"># 5cc3b0c720a25d25939f5db25dba1d2f66ed49ab</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h1><pre><code>代码混淆（字符串混淆、控制流平坦化）、dex加壳（方法抽取）、动态加载、Inline Hook（ShadowHook）|
+dex dump
+</code></pre>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a target="_blank" rel="noopener" href="https://onejane.github.io/2021/03/25/%E5%8A%A0%E5%A3%B3%E4%B8%8E%E8%84%B1%E5%A3%B3%E4%B9%8B%E4%BA%8C%E4%BB%A3%E5%A3%B3%E5%87%BD%E6%95%B0%E6%8A%BD%E5%8F%96/">https://onejane.github.io/2021/03/25/%E5%8A%A0%E5%A3%B3%E4%B8%8E%E8%84%B1%E5%A3%B3%E4%B9%8B%E4%BA%8C%E4%BB%A3%E5%A3%B3%E5%87%BD%E6%95%B0%E6%8A%BD%E5%8F%96/</a><br><a target="_blank" rel="noopener" href="https://bbs.kanxue.com/thread-285135.htm">https://bbs.kanxue.com/thread-285135.htm</a><br><a target="_blank" rel="noopener" href="https://bbs.kanxue.com/thread-285152.htm">https://bbs.kanxue.com/thread-285152.htm</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://Matchstick135.github.io">Ms135</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://matchstick135.github.io/2025/01/24/2025-1-24%20%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8%202025%20HappyLock/">https://matchstick135.github.io/2025/01/24/2025-1-24%20%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8%202025%20HappyLock/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Matchstick135.github.io" target="_blank">Ms135's Blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/2025-1-24.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2025/01/15/2025-1-15%20so%E5%8A%A0%E5%9B%BA%E5%8F%8A%E5%AF%B9%E6%8A%97/" title="so加固及对抗"><img class="cover" src="/img/2025-1-15.jpg" onerror="onerror=null;src='/null'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">so加固及对抗</div></div><div class="info-2"><div class="info-item-1">本文记录了常见so加固手段，从原理及对抗两个方面进行总结文章会根据后续的学习进度，持续追加新内容 默认环境如下：  系统：Android 9.0.0 架构：arm64  加固手段节加密在此之前，先来回顾一下ELF文件的大致格式  源码中，将待保护函数放到自定义节，然后在.init_array中对该节进行解密 12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879#include &quot;com_example_myapplication_MainActivity.h&quot;#include &lt;jni.h&gt;#include &lt;stdio.h&gt;#include &lt;stdlib.h&gt;#include &lt;string.h&gt;#include &lt;unistd.h&gt;#include...</div></div></div></a><a class="pagination-related" href="/2025/01/25/2025-1-25%20%E7%99%BE%E5%BA%A6%E5%8A%A0%E5%9B%BA%E5%85%8D%E8%B4%B9%E7%89%88%E5%88%86%E6%9E%90%EF%BC%88%E6%9C%AA%E5%AE%8C%EF%BC%89/" title="百度加固免费版分析（未完）"><img class="cover" src="/img/2025-1-25.jpg" onerror="onerror=null;src='/null'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">百度加固免费版分析（未完）</div></div><div class="info-2"><div class="info-item-1">小白久闻百度加固之名，却从未亲眼见过，可以说对其中的运作机制一直是一头雾水这里紧跟这位大佬的思路，一步一个脚印去复现希望能逐步走进企业级加固，揭开其神秘面纱，也为未来面对时提供一定参考 壳dex原dex已只剩一个R类，其他部分会在后续过程中被释放加载 查看AndroidManifest.xml中的 application标签，得知程序入口处为 StubApplication StubApplication.attachBaseContext来到其中被重写的 attachBaseContext() (1)Debug.isDebuggerConnected反调试，可通过提前在 libart.so的 isDebuggerConnected()中下断点 实现绕过 (2)loadLibrary开始加载 libbaiduprotect.so，因此接下来进入native，开始分析so加载过程 (5)A.n001loadLibrary() 加载完libbaiduprotect.so后，调用了先前 JNI_Onload()中注册的 n001()，对应native的...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/%E5%A4%B4%E5%83%8F.jpg" onerror="this.onerror=null;this.src='/null'" alt="avatar"/></div><div class="author-info-name">Ms135</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">41</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%A2%98%E7%9B%AE"><span class="toc-number">1.</span> <span class="toc-text">题目</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A3%E9%A2%98%E8%BF%87%E7%A8%8B"><span class="toc-number">2.</span> <span class="toc-text">解题过程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#MainActivity"><span class="toc-number">2.1.</span> <span class="toc-text">MainActivity</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Utils"><span class="toc-number">2.2.</span> <span class="toc-text">Utils</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Check"><span class="toc-number">2.3.</span> <span class="toc-text">Check</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#libhappylock-so"><span class="toc-number">2.4.</span> <span class="toc-text">libhappylock.so</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Check-fixed"><span class="toc-number">2.5.</span> <span class="toc-text">Check (fixed)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%87%E7%AD%BE"><span class="toc-number">3.</span> <span class="toc-text">标签</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-number">4.</span> <span class="toc-text">参考</span></a></li></ol></div></div><div class="card-widget card-post-series"><div class="item-headline"><i class="fa-solid fa-layer-group"></i><span>系列文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/01/24/2025-1-24%20%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8%202025%20HappyLock/" title="软件系统安全 2025 HappyLock"><img src="/img/2025-1-24.jpg" onerror="this.onerror=null;this.src='/null'" alt="软件系统安全 2025 HappyLock"></a><div class="content"><a class="title" href="/2025/01/24/2025-1-24%20%E8%BD%AF%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8%202025%20HappyLock/" title="软件系统安全 2025 HappyLock">软件系统安全 2025 HappyLock</a><time datetime="2025-01-23T16:00:00.000Z" title="发表于 2025-01-24 00:00:00">2025-01-24</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
