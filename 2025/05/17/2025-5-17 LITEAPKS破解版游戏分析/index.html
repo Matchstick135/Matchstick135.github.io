@@ -1,0 +1,347 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>LITEAPKS破解版游戏分析 | Ms135's Blog</title><meta name="author" content="Ms135"><meta name="copyright" content="Ms135"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="从小到大虽然没怎么玩过破解版游戏（确信），但多多少少见识过一些其破解后的样子按照自己的经验大致，大致归为了两类：1.进去就能看到无限游戏币、全物品解锁等2.内置悬浮窗菜单，其中是各类作弊功能的 开启按钮 年幼那会，一直以来都很好奇这是如何实现的不过自从入了逆向坑后，也是逐渐理解了上述第一种的实现原理然而好奇心仍未消退————第二种是怎么做到的？？正好，手上有几个来自LITEAPKS平台的破解版游戏">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LITEAPKS破解版游戏分析">
+<meta property="og:url" content="https://matchstick135.github.io/2025/05/17/2025-5-17%20LITEAPKS%E7%A0%B4%E8%A7%A3%E7%89%88%E6%B8%B8%E6%88%8F%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Ms135&#39;s Blog">
+<meta property="og:description" content="从小到大虽然没怎么玩过破解版游戏（确信），但多多少少见识过一些其破解后的样子按照自己的经验大致，大致归为了两类：1.进去就能看到无限游戏币、全物品解锁等2.内置悬浮窗菜单，其中是各类作弊功能的 开启按钮 年幼那会，一直以来都很好奇这是如何实现的不过自从入了逆向坑后，也是逐渐理解了上述第一种的实现原理然而好奇心仍未消退————第二种是怎么做到的？？正好，手上有几个来自LITEAPKS平台的破解版游戏">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://matchstick135.github.io/img/2025-5-17.jpg">
+<meta property="article:published_time" content="2025-05-16T16:00:00.000Z">
+<meta property="article:modified_time" content="2025-06-02T16:57:32.124Z">
+<meta property="article:author" content="Ms135">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://matchstick135.github.io/img/2025-5-17.jpg"><link rel="shortcut icon" href="/img/%E5%A4%B4%E5%83%8F.jpg"><link rel="canonical" href="https://matchstick135.github.io/2025/05/17/2025-5-17%20LITEAPKS%E7%A0%B4%E8%A7%A3%E7%89%88%E6%B8%B8%E6%88%8F%E5%88%86%E6%9E%90/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":5,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":false,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'LITEAPKS破解版游戏分析',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  isShuoshuo: false
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div id="web_bg" style="background-image: url(/img/背景.jpg);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/%E5%A4%B4%E5%83%8F.jpg" onerror="onerror=null;src='null'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">49</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/2025-5-17.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Ms135's Blog</span></a><a class="nav-page-title" href="/"><span class="site-name">LITEAPKS破解版游戏分析</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">LITEAPKS破解版游戏分析</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="fa-fw post-meta-icon far fa-calendar-alt"></i><span class="post-meta-label">发表于</span><time datetime="2025-05-16T16:00:00.000Z" title="发表于 2025-05-17 00:00:00">2025-05-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E9%80%86%E5%90%91%E6%97%A5%E8%AE%B0/">逆向日记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">4.5k</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>从小到大虽然没怎么玩过破解版游戏（确信），但多多少少见识过一些其破解后的样子<br>按照自己的经验大致，大致归为了两类：<br>1.进去就能看到无限游戏币、全物品解锁等<br>2.内置悬浮窗菜单，其中是各类作弊功能的 开启按钮</p>
+<p>年幼那会，一直以来都很好奇这是如何实现的<br>不过自从入了逆向坑后，也是逐渐理解了上述第一种的实现原理<br>然而好奇心仍未消退————第二种是怎么做到的？？<br>正好，手上有几个来自LITEAPKS平台的破解版游戏，因此速速一探究竟</p>
+<p>然后本来觉得，既然是在记录原理性的东西，应该放到”硬核知识”那个分类<br>但是又想到整个过程，又不是拿着人家的 作弊逻辑源码去分析，而是基于逆向的<br>所以最后还是选择 放到当前这个分类了</p>
+<p>样本：</p>
+<ol>
+<li>SAKURA School Simulator_1.044.06</li>
+<li>Soul Kngiht_6.5.0</li>
+<li>SAKURA School Simulator_1.045.07</li>
+</ol>
+<p>环境：</p>
+<ol>
+<li>系统：Android 10</li>
+<li>架构：arm64</li>
+</ol>
+<h1 id="样本-I"><a href="#样本-I" class="headerlink" title="样本 I"></a>样本 I</h1><h2 id="观察"><a href="#观察" class="headerlink" title="观察"></a>观察</h2><p>与原版相比，文件改动如下：</p>
+<ol>
+<li>文件夹</li>
+</ol>
+<p>lib\下，多了 libliteapks.so<br>META-INF\下，ANDROID.RSA、ANDROID.SF变为 CERT.CERT.SF；MANIFEST.MF也变了（重打包）<br>res\下，多了点…</p>
+<ol start="2">
+<li>文件</li>
+</ol>
+<p>AndroidManifest.xml中，<br>&lt;manifest&gt;少了 android:requiredSplitTypes&#x3D;”base__abi”、android:splitTypes&#x3D;””<br>&lt;application&gt;多了 android:extractNativeLibs&#x3D;”true”<br>&lt;activity&gt;, &lt;provider&gt;少了…<br>&lt;meta-data&gt;改了…</p>
+<p>classes.dex中，多了点…<br>classes2.dex中，多了点…<br>classes3.dex中，多了点…<br>classes4.dex中，多了 com.android.support（Loader, Menu…）、com.lite.apks（up）<br>resources.arsc中，多了点…<br>少了 stamp-cert-sha256</p>
+<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><h3 id="licensecheck绕过"><a href="#licensecheck绕过" class="headerlink" title="licensecheck绕过"></a>licensecheck绕过</h3><p>作为原本来自 Google Play Store的应用，包含官方的 许可证校验逻辑<br><img src="/img/2025-5-17/3.png"></p>
+<p>LITEAPKS的应对是：</p>
+<ol>
+<li><p>移除 LicenseActivity, LicenseContentProvider在 AndroidManifest.xml中的申明，<br>使其无法被系统识别<br><img src="/img/2025-5-17/4.png"></p>
+</li>
+<li><p>将签名块元数据中的 签名来源标识，从”STAMP_TYPE_DISTRIBUTION_APK” 改为”STAMP_TYPE_STANDALONE_APK”，<br>实现从 分发APK（经Google Play Store动态生成）伪装为 独立APK（由开发者直接构建）<br><img src="/img/2025-5-17/5.png"></p>
+</li>
+<li><p>移除签名块元数据中的 SplitAPKs依赖标记、动态apk唯一标识<br><img src="/img/2025-5-17/6.png"></p>
+</li>
+</ol>
+<h3 id="悬浮窗菜单插入"><a href="#悬浮窗菜单插入" class="headerlink" title="悬浮窗菜单插入"></a>悬浮窗菜单插入</h3><p>长这么个样子，然而 Mod Features下这几个作弊按键，交互后根本没反应？？<br><img src="/img/2025-5-17/48.png"><br>且作弊功能 似乎已默认生效？？什么情况<br><img src="/img/2025-5-17/50.png"></p>
+<h4 id="java层"><a href="#java层" class="headerlink" title="java层"></a>java层</h4><p>作弊逻辑位于 com.android.support, com.lite.apks两个新增的包中<br><img src="/img/2025-5-17/7.png"></p>
+<p>发现许多地方被混淆了，且通过特征可以判断出是基于 <a target="_blank" rel="noopener" href="https://github.com/CodingGay/BlackObfuscator">BlackObfuscator</a><br><img src="/img/2025-5-17/8.png"><br>估计是为了省事，所以选择了该混淆器<br>然而可通过新版JEB 自带的反混淆功能直接去除<br><img src="/img/2025-5-17/9.png"></p>
+<p>接下来按照执行顺序，看看整体逻辑</p>
+<ol>
+<li>com.unity3d.player.UnityPlayerActivity</li>
+</ol>
+<p>Unity在Android平台上的运行入口点 com.unity3d.player.UnityPlayerActivity.onCreate()中，<br>被插桩了作弊逻辑的入口函数 Loader.Start()<br><img src="/img/2025-5-17/10.png"></p>
+<ol start="2">
+<li>com.android.support.Loader</li>
+</ol>
+<p>start()中，<br>先调用 up.process()，用于处理与LITEAPKS服务器的通信、检测更新、显示更新对话框；<br>再加载核心库 libliteapks.so；<br>最后通过 Handler延迟几秒调用 initFloating()，猜测是给库留时间初始化<br><img src="/img/2025-5-17/11.png"></p>
+<p>initFloating()中，<br>先是初始化自定义悬浮窗口 Menu类；<br>再添加标题文本；<br>最后在for循环内 动态添加一系列控件。其中，用于实现核心篡改功能的native函数 Changes()，被写在Menu的OnWrite()回调中<br><img src="/img/2025-5-17/12.png"></p>
+<ol start="3">
+<li>com.lite.apks.up</li>
+</ol>
+<p>该类倒是没有用BlackObfuscator进行控制流层面的混淆，但包含大量的名称混淆、字符串混淆<br><img src="/img/2025-5-17/13.png"></p>
+<p>process()中，<br>对一系列浮点数进行运算、拼接生成字符串；<br>基于HandlerThread创建子线程，其中通过Handler 提交Runnable任务，异步执行run()<br><img src="/img/2025-5-17/22.png"></p>
+<p>run()中，<br>基于解码后的URL发送 HTTP请求；<br>获取到更新信息后，动态创建一个AlertDialog，文本同样来自解码后的字符串<br><img src="/img/2025-5-17/23.png"></p>
+<ol start="4">
+<li>com.android.support.Menu</li>
+</ol>
+<p>基于 WindowManager实现的悬浮窗逻辑<br>对 Button, SeekBar, TextView等一系列控件进行组合封装，提供方法给 Loader类实现动态创建<br><img src="/img/2025-5-17/16.png"></p>
+<ol start="5">
+<li>com.android.support.MainActivity</li>
+</ol>
+<p>并没在 AndroidManifest.xml中看到其申明，猜测是测试阶段的保留<br><img src="/img/2025-5-17/21.png"></p>
+<h4 id="native层"><a href="#native层" class="headerlink" title="native层"></a>native层</h4><p>libliteapks.so的导出表中，可看到一系列静态注册的函数<br><img src="/img/2025-5-17/14.png"></p>
+<ol>
+<li>setHeadingText, setTitleText, getFeatures()</li>
+</ol>
+<p>就是解密字符串后返回<br><img src="/img/2025-5-17/15.png"></p>
+<ol start="2">
+<li>Icon()</li>
+</ol>
+<p>直接返回经Base64处理过的图标数据，其会在java层被解码、解析与显示<br>这种对图像资源进行加密的情况之前貌似没遇到过，在此记录一下<br><img src="/img/2025-5-17/18.png"></p>
+<ol start="3">
+<li>Changes()</li>
+</ol>
+<p>重点关注 Changes()，其竟然没有任何传参和内容？？很不对劲<br><img src="/img/2025-5-17/19.png"></p>
+<ol start="4">
+<li>.init_array</li>
+</ol>
+<p>奥秘估计就在这几个初始化函数中<br><img src="/img/2025-5-17/20.png"></p>
+<p>4.1 sub_67530</p>
+<p>子线程形式执行后续逻辑<br><img src="/img/2025-5-17/32.png"></p>
+<p>先是使用一系列ARM的 SIMD扩展指令集NEON，对字符串进行解密<br><img src="/img/2025-5-17/25.png"><br>然后有类似如下的三处 对libil2cpp.so指定偏移处API进行hook，修改其传参后调用原函数<br><img src="/img/2025-5-17/26.png"></p>
+<p>其中 libil2cpp.so偏移获取，就是常规的 fopen + fgets + strstr<br>hook则是使用 <a target="_blank" rel="noopener" href="https://github.com/Rprop/And64InlineHook">And64InlineHook</a> 这个ARM hook框架，以下为API在源码和伪代码下的对比<br><img src="/img/2025-5-17/27.png"></p>
+<p>怪不得悬浮窗中这几个作弊按键 交互后根本没有反应。毕竟其native层的 Changes()中啥都没写<br>而实现作弊功能的逻辑，在 libliteapks.so初始化过程中就已执行了<br>这也解释了为什么刚进游戏时，明明没与作弊按键交互，其功能就已默认生效</p>
+<p>4.2 sub_68208<br>__cxa_atexit()注册某个对象的析构逻辑，用于程序退出时的内存释放<br><img src="/img/2025-5-17/29.png"></p>
+<p>4.3 sub_69474<br>同样是 __cxa_atexit()</p>
+<p>4.4 sub_6B27C<br>将某块内存属性设置为 RWX</p>
+<p>4.5 sub_D00F4<br>获取设备的CPU架构信息<br><img src="/img/2025-5-17/24.png"></p>
+<h1 id="样本-II"><a href="#样本-II" class="headerlink" title="样本 II"></a>样本 II</h1><h2 id="观察-1"><a href="#观察-1" class="headerlink" title="观察"></a>观察</h2><p>与 <em>样本 I</em> 相比：</p>
+<ol>
+<li>文件夹</li>
+</ol>
+<p>lib\下，也包含 libliteapks.so</p>
+<ol start="2">
+<li>文件</li>
+</ol>
+<p>对于java层新增逻辑，被统一存放在新的 classes8.dex中<br>且多了 bin.mt.signature（KillerApplication）、org.lsposed.hiddenapibypass（HiddenApiBypass, Helper$xxx…）<br><img src="/img/2025-5-17/30.png"></p>
+<h2 id="分析-1"><a href="#分析-1" class="headerlink" title="分析"></a>分析</h2><p>该游戏本身不来自 Google Play Store，不包含 许可证校验逻辑<br>因此破解过程也不涉及 licensecheck绕过</p>
+<h3 id="悬浮窗菜单插入-1"><a href="#悬浮窗菜单插入-1" class="headerlink" title="悬浮窗菜单插入"></a>悬浮窗菜单插入</h3><p>此处悬浮窗中的作弊功能与 <em>样本 I</em> 不同，部分是有开关可控制的<br><img src="/img/2025-5-17/35.png"></p>
+<h4 id="java层-1"><a href="#java层-1" class="headerlink" title="java层"></a>java层</h4><p>与 <em>样本 I</em> 思路大体一致<br>只不过 Loader.Start()插桩的位置，从 UnityPlayerActivity变为其子类 BasePlayerActivity<br><img src="/img/2025-5-17/31.png"></p>
+<h4 id="native层-1"><a href="#native层-1" class="headerlink" title="native层"></a>native层</h4><ol>
+<li>.init_array</li>
+</ol>
+<p><img src="/img/2025-5-17/33.png"><br>与 <em>样本 I</em> 也差不多。第一个函数实现作弊逻辑，后两个注册对象的构析</p>
+<p>只不过第一个函数中，API的偏移字符串不再以明文形式存储<br>同时为了实现用户可控的作弊功能，在hook函数中会基于全局变量 来判断是否要执行作弊逻辑<br><img src="/img/2025-5-17/34.png"></p>
+<p>而对于该全局变量的修改，即位于JNI函数 Changes()中<br><img src="/img/2025-5-17/36.png"></p>
+<ol start="2">
+<li>Changes()</li>
+</ol>
+<p>基于跳转表的switch结构，针对第二个传参（java层而言）的取值 0-3，进入四个case进行处理<br>其中case 2 基于异或1取反，实现对上方全局变量的修改<br><img src="/img/2025-5-17/39.png"></p>
+<h3 id="签名校验去除"><a href="#签名校验去除" class="headerlink" title="签名校验去除"></a>签名校验去除</h3><p>如果有研究过 MT管理器”去除签名校验”功能，其实就能理解这里 bin.mt.signature、org.lsposed.hiddenapibypass两个包的由来了</p>
+<p>大致原理就是将自己添加为用户自定义Application的 父类<br>在应用启动过程中，劫持常规的Application初始化流程<br><img src="/img/2025-5-17/37.png"></p>
+<p>然后基于 PackageInfo.CREATOR替换、IO重定向，实现对应用中 签名校验逻辑的拦截<br><img src="/img/2025-5-17/38.png"></p>
+<p>至于具体实现，这里就不再赘述了，感兴趣的可自行查阅 <a target="_blank" rel="noopener" href="https://github.com/L-JINBIN/ApkSignatureKillerEx">ApkSignatureKillerEx</a> </p>
+<h1 id="样本-III"><a href="#样本-III" class="headerlink" title="样本 III"></a>样本 III</h1><h2 id="观察-2"><a href="#观察-2" class="headerlink" title="观察"></a>观察</h2><p>与 <em>样本 I</em> 相比：</p>
+<ol>
+<li>文件夹</li>
+</ol>
+<p>lib\下，除了 libliteapks.so，还多了 libmenuliteapks.so, libprotectliteapks.so</p>
+<ol start="2">
+<li>文件</li>
+</ol>
+<p>java层新增逻辑，被统一存放在新的 classes5.dex中<br>且 com.android.support下大变样<br><img src="/img/2025-5-17/40.png"></p>
+<h2 id="分析-2"><a href="#分析-2" class="headerlink" title="分析"></a>分析</h2><h3 id="licensecheck绕过-1"><a href="#licensecheck绕过-1" class="headerlink" title="licensecheck绕过"></a>licensecheck绕过</h3><p>与 <em>样本 I</em> 大差不差</p>
+<h3 id="签名校验去除-1"><a href="#签名校验去除-1" class="headerlink" title="签名校验去除"></a>签名校验去除</h3><p>与 <em>样本 II</em> 大差不差<br>只不过全类名从 bin.mt.signature.KillerApplication 变为了 com.android.support.jiagukiller<br><img src="/img/2025-5-17/43.png"></p>
+<h3 id="悬浮窗菜单插入-2"><a href="#悬浮窗菜单插入-2" class="headerlink" title="悬浮窗菜单插入"></a>悬浮窗菜单插入</h3><p>不得不说，新版的悬浮窗美观了不少<br><img src="/img/2025-5-17/49.png"><br>但和 <em>样本 I</em> 一样，Mod Features下这几个作弊按键，仍然交互不了<br>看来LITEAPKS官方对该游戏的作弊方案，一贯是这么处理的</p>
+<h4 id="java层-2"><a href="#java层-2" class="headerlink" title="java层"></a>java层</h4><p>入口方法从 Loader.Start()变成了为 Main.Start()，且作弊逻辑被统一下放至native层<br>得去显式加载的 libliteapks.so, libmenuliteapks.so中找<br><img src="/img/2025-5-17/42.png"></p>
+<p>其实从这个配置可以看出，是来自开源的DexVMP项目 <a target="_blank" rel="noopener" href="https://github.com/maoabc/nmmp">nmmp</a><br>且通过后续分析还可知，LITEAPKS在原版基础上进行了 一定程度的魔改</p>
+<h4 id="native层-2"><a href="#native层-2" class="headerlink" title="native层"></a>native层</h4><p>这里不再分析 libliteapks.so，直接从新增的 libmenuliteapks.so切入</p>
+<h5 id="前期观察"><a href="#前期观察" class="headerlink" title="前期观察"></a>前期观察</h5><ol>
+<li><p>(RW)LOAD段装载时，多要了很多内存空间<br><img src="/img/2025-5-17/53.png"></p>
+</li>
+<li><p>尝试hook RegisterNatives()，打印每个类下所有native方法的信息</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">find_natives</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="title class_">Java</span>.<span class="title function_">perform</span>(<span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">        <span class="keyword">var</span> symbols = <span class="title class_">Process</span>.<span class="title function_">getModuleByName</span>(<span class="string">&quot;libart.so&quot;</span>).<span class="title function_">enumerateSymbols</span>();</span><br><span class="line">        <span class="keyword">var</span> <span class="title class_">RegisterNatives</span>_addr = <span class="variable constant_">NULL</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> index = <span class="number">0</span>; index &lt; symbols.<span class="property">length</span>; index++) &#123;</span><br><span class="line">            <span class="keyword">const</span> symbol = symbols[index];</span><br><span class="line">            <span class="keyword">if</span> (symbol.<span class="property">name</span>.<span class="title function_">indexOf</span>(<span class="string">&quot;CheckJNI&quot;</span>) == -<span class="number">1</span> &amp;&amp; symbol.<span class="property">name</span>.<span class="title function_">indexOf</span>(<span class="string">&quot;RegisterNatives&quot;</span>) &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="title class_">RegisterNatives</span>_addr = symbol.<span class="property">address</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="title class_">Interceptor</span>.<span class="title function_">attach</span>(<span class="title class_">RegisterNatives</span>_addr, &#123;</span><br><span class="line">            <span class="attr">onEnter</span>: <span class="keyword">function</span>(<span class="params">args</span>) &#123;</span><br><span class="line">                <span class="keyword">var</span> env = <span class="title class_">Java</span>.<span class="property">vm</span>.<span class="title function_">tryGetEnv</span>();</span><br><span class="line">                <span class="keyword">var</span> class_name = env.<span class="title function_">getClassName</span>(args[<span class="number">1</span>]);</span><br><span class="line">                <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;class_name:&quot;</span>, class_name);</span><br><span class="line"></span><br><span class="line">                <span class="keyword">var</span> method_count = args[<span class="number">3</span>].<span class="title function_">toInt32</span>();</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">var</span> index = <span class="number">0</span>; index &lt; method_count; index++) &#123;</span><br><span class="line">                    <span class="keyword">var</span> method_name = args[<span class="number">2</span>].<span class="title function_">add</span>(<span class="title class_">Process</span>.<span class="property">pointerSize</span> * <span class="number">3</span> * index).<span class="title function_">readPointer</span>().<span class="title function_">readCString</span>();</span><br><span class="line">                    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;&gt;&gt; method_name:&quot;</span>, method_name);</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">var</span> signature = args[<span class="number">2</span>].<span class="title function_">add</span>(<span class="title class_">Process</span>.<span class="property">pointerSize</span> * <span class="number">3</span> * index).<span class="title function_">add</span>(<span class="title class_">Process</span>.<span class="property">pointerSize</span>).<span class="title function_">readPointer</span>().<span class="title function_">readCString</span>();</span><br><span class="line">                    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;&gt;&gt; signature:&quot;</span>, signature);</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">var</span> fnPtr = args[<span class="number">2</span>].<span class="title function_">add</span>(<span class="title class_">Process</span>.<span class="property">pointerSize</span> * <span class="number">3</span> * index).<span class="title function_">add</span>(<span class="title class_">Process</span>.<span class="property">pointerSize</span> * <span class="number">2</span>).<span class="title function_">readPointer</span>();</span><br><span class="line">                    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;&gt;&gt; fnPtr:&quot;</span>, fnPtr);</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">var</span> modeule = <span class="title class_">Process</span>.<span class="title function_">findModuleByAddress</span>(fnPtr);</span><br><span class="line">                    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;&gt;&gt; modeule:&quot;</span>, <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(modeule));</span><br><span class="line">                    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;&gt;&gt; func_addr:&quot;</span>, fnPtr.<span class="title function_">sub</span>(modeule.<span class="property">base</span>));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">onLeave</span>: <span class="keyword">function</span>(<span class="params">retval</span>) &#123;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>整理了下输出，发现几个关键方法竟都落在 .bss节，也就前面多要的内存区域<br><img src="/img/2025-5-17/41.png"></p>
+</li>
+<li><p>既然方法的代码会被放在 .bss节，那在此之前肯定会进行数据复制<br>因此 hook memcpy()，拦截向.bss节的数据复制操作，并对较大数据块进行dump</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">hook_memcpy</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">var</span> memcpyPtr = <span class="title class_">Module</span>.<span class="title function_">findExportByName</span>(<span class="literal">null</span>, <span class="string">&quot;memcpy&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">const</span> <span class="variable constant_">START_ADDR</span> = <span class="title function_">ptr</span>(<span class="string">&quot;0x74A70&quot;</span>);  <span class="comment">// .bss节区间</span></span><br><span class="line">    <span class="keyword">const</span> <span class="variable constant_">END_ADDR</span> = <span class="title function_">ptr</span>(<span class="string">&quot;0xBD718&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="title class_">Interceptor</span>.<span class="title function_">attach</span>(memcpyPtr, &#123;</span><br><span class="line">        <span class="attr">onEnter</span>: <span class="keyword">function</span>(<span class="params">args</span>) &#123;</span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">dest</span> = args[<span class="number">0</span>];        <span class="comment">// dest</span></span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">src</span> = args[<span class="number">1</span>];         <span class="comment">// src</span></span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">n</span> = args[<span class="number">2</span>].<span class="title function_">toInt32</span>(); <span class="comment">// length</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">onLeave</span>: <span class="keyword">function</span>(<span class="params">retval</span>) &#123;</span><br><span class="line">            <span class="keyword">var</span> destAddr = <span class="variable language_">this</span>.<span class="property">dest</span>;</span><br><span class="line">            <span class="keyword">var</span> <span class="variable language_">module</span> = <span class="title class_">Process</span>.<span class="title function_">findModuleByAddress</span>(destAddr);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (<span class="variable language_">module</span>) &#123;</span><br><span class="line">                <span class="keyword">var</span> offset = destAddr.<span class="title function_">sub</span>(<span class="variable language_">module</span>.<span class="property">base</span>);</span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span> (offset.<span class="title function_">compare</span>(<span class="variable constant_">START_ADDR</span>) &gt;= <span class="number">0</span> &amp;&amp; offset.<span class="title function_">compare</span>(<span class="variable constant_">END_ADDR</span>) &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">                    <span class="comment">// 参数信息</span></span><br><span class="line">                    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;\n[memcpy]&quot;</span>);</span><br><span class="line">                    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;  Module: &quot;</span> + <span class="variable language_">module</span>.<span class="property">name</span>);</span><br><span class="line">                    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;  Dest Offset: 0x&quot;</span> + offset.<span class="title function_">toString</span>(<span class="number">16</span>));</span><br><span class="line">                    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;  Length: &quot;</span> + <span class="variable language_">this</span>.<span class="property">n</span> + <span class="string">&quot; bytes&quot;</span>);</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// 打印堆栈</span></span><br><span class="line">                    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;  [Backtrace]&quot;</span>);</span><br><span class="line">                    <span class="title class_">Thread</span>.<span class="title function_">backtrace</span>(<span class="variable language_">this</span>.<span class="property">context</span>, <span class="title class_">Backtracer</span>.<span class="property">ACCURATE</span>)</span><br><span class="line">                        .<span class="title function_">map</span>(<span class="title class_">DebugSymbol</span>.<span class="property">fromAddress</span>)</span><br><span class="line">                        .<span class="title function_">forEach</span>(<span class="function">(<span class="params">frame, i</span>) =&gt;</span> &#123;</span><br><span class="line">                            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`    <span class="subst">$&#123;i&#125;</span>. <span class="subst">$&#123;frame.moduleName || <span class="string">&#x27;???&#x27;</span>&#125;</span>!<span class="subst">$&#123;frame.name || frame.address&#125;</span>`</span>);</span><br><span class="line">                        &#125;);</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// dump大数据块</span></span><br><span class="line">                    <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">n</span> &gt; <span class="number">100</span>) &#123;</span><br><span class="line">                        <span class="keyword">var</span> data = <span class="variable language_">this</span>.<span class="property">src</span>.<span class="title function_">readByteArray</span>(<span class="variable language_">this</span>.<span class="property">n</span>);</span><br><span class="line">                        <span class="keyword">var</span> dump_path = <span class="string">&quot;/data/data/jp.garud.ssimulator/memcpy_0x&quot;</span> + offset.<span class="title function_">toString</span>(<span class="number">16</span>) + <span class="string">&quot;_&quot;</span> + <span class="variable language_">this</span>.<span class="property">n</span> + <span class="string">&quot;.bin&quot;</span>;</span><br><span class="line">                        <span class="keyword">var</span> file_handle = <span class="keyword">new</span> <span class="title class_">File</span>(dump_path, <span class="string">&quot;wb&quot;</span>);</span><br><span class="line">                        <span class="keyword">if</span> (file_handle &amp;&amp; file_handle !== <span class="literal">null</span>) &#123;</span><br><span class="line">                            file_handle.<span class="title function_">write</span>(data);</span><br><span class="line">                            file_handle.<span class="title function_">flush</span>();</span><br><span class="line">                            file_handle.<span class="title function_">close</span>();</span><br><span class="line">                            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;  [Dump] &quot;</span> + dump_path);</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>果然dump出三块数据<br><img src="/img/2025-5-17/55.png"></p>
+</li>
+<li><p>在依赖库列表中没看到预期的 libprotectliteapks.so<br><img src="/img/2025-5-17/52.png"><br>分别hook android_dlopen_ext(), dlopen()</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">hook_dlopen</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> dlopen = <span class="title class_">Module</span>.<span class="title function_">findExportByName</span>(<span class="literal">null</span>, <span class="string">&quot;dlopen&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="title class_">Interceptor</span>.<span class="title function_">attach</span>(dlopen, &#123;</span><br><span class="line">        <span class="attr">onEnter</span>: <span class="keyword">function</span> (<span class="params">args</span>) &#123;</span><br><span class="line">            <span class="keyword">const</span> libName = args[<span class="number">0</span>].<span class="title function_">readUtf8String</span>();</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`[dlopen] Loading library: <span class="subst">$&#123;libName&#125;</span>`</span>);</span><br><span class="line"></span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot; [Call stack]&quot;</span>);</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="title class_">Thread</span>.<span class="title function_">backtrace</span>(<span class="variable language_">this</span>.<span class="property">context</span>, <span class="title class_">Backtracer</span>.<span class="property">ACCURATE</span>)</span><br><span class="line">                .<span class="title function_">map</span>(<span class="title class_">DebugSymbol</span>.<span class="property">fromAddress</span>).<span class="title function_">join</span>(<span class="string">&quot;\n&quot;</span>));</span><br><span class="line"></span><br><span class="line">            <span class="keyword">const</span> isLoaded = <span class="title function_">isLibraryLoaded</span>(libName);</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">` [Before] Library <span class="subst">$&#123;libName&#125;</span> loaded: <span class="subst">$&#123;isLoaded&#125;</span>`</span>);</span><br><span class="line"></span><br><span class="line">            <span class="variable language_">this</span>.<span class="property">libName</span> = libName;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">onLeave</span>: <span class="keyword">function</span> (<span class="params">retval</span>) &#123;</span><br><span class="line">            <span class="keyword">const</span> isLoaded = <span class="title function_">isLibraryLoaded</span>(<span class="variable language_">this</span>.<span class="property">libName</span>);</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">` [After] Library <span class="subst">$&#123;<span class="variable language_">this</span>.libName&#125;</span> loaded: <span class="subst">$&#123;isLoaded&#125;</span>`</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">isLibraryLoaded</span>(<span class="params">libName</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> modules = <span class="title class_">Process</span>.<span class="title function_">enumerateModules</span>();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">const</span> <span class="variable language_">module</span> <span class="keyword">of</span> modules) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">module</span>.<span class="property">path</span>.<span class="title function_">includes</span>(libName)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>发现只能在后者中拦截到<br>且对于这一系列传入dlopen()的库，只有 libprotectliteapks.so是真正通过它加载的<br><img src="/img/2025-5-17/54.png"></p>
+</li>
+<li><p>存在几个奇怪的节<br><img src="/img/2025-5-17/44.png"></p>
+</li>
+</ol>
+<h5 id="入口分析"><a href="#入口分析" class="headerlink" title="入口分析"></a>入口分析</h5><ol>
+<li>.init_array</li>
+</ol>
+<p>对从.text分出来的.main节进行RC4解密（key来自从.data分出来的.ced节）<br><img src="/img/2025-5-17/45.png"></p>
+<p>给.main节dump出来，patch即可<br>这下可以看到位于其中的 JNI_OnLoad()了<br><img src="/img/2025-5-17/46.png"></p>
+<ol start="2">
+<li>JNI_OnLoad()</li>
+</ol>
+<p><img src="/img/2025-5-17/47.png"></p>
+<p>2.1 GetFingerprint_SendHTTP()<br>先获取一系列设备指纹<br><img src="/img/2025-5-17/56.png"><br>然后构造HTTP请求，与服务器通信<br><img src="/img/2025-5-17/57.png"></p>
+<p>2.2 __cxa_cleanup_vir()<br>一开始以为是什么库函数，结果暗藏玄机，里面竟是用户自定义逻辑<br><img src="/img/2025-5-17/61.png"></p>
+<p>其中 __cxa_free_all()算半个自实现linker<br>因为一半在 自实现加载原so LOAD段，一半在 直接加载libprotectliteapks.so<br><img src="/img/2025-5-17/62.png"><br><em>前期观察 3.</em> 中提到的 往.bss复制数据，位于这里的 mprotect_memset_memcpy_addr()，用于装载原so LOAD段；<br><em>前期观察 4.</em> 中提到的 将 libprotectliteapks.so等库传入dlopen()，位于这里的 get_so_handle()，用于加载 libprotectliteapks.so</p>
+<p>然后 own_dlsym()是一个自实现的 dlysym()，用于获取原so的 JNI_OnLoad()地址<br><img src="/img/2025-5-17/63.png"><br>在其中能看到 直接符号查找、哈希表查找等操作</p>
+<p>最后 __cxa_global_warm()在对自身ELF结构进行解析，获取与符号查找相关的结构（.hash, .dynstr, dynsym节），将部分数据替换为原so的<br><img src="/img/2025-5-17/64.png"><br>以下是通过hook其中调用的memcpy() 得到的目标位置，以及 dump出的源数据（包含原so符号信息）<br><img src="/img/2025-5-17/65.png"></p>
+<p>2.3 ptr_JNI_OnLoad()<br>这里便是在调用原so的 JNI_OnLoad()，当然也是落在.bss节中</p>
+<p>hook后得到其偏移地址<br><img src="/img/2025-5-17/51.png"></p>
+<h5 id="函数现形"><a href="#函数现形" class="headerlink" title="函数现形"></a>函数现形</h5><p>结合 <em>前期观察 2.</em> 中 hook RegisterNatives()得到的 native方法地址，<br>可以发现 .bss节中最早出现的代码位于 0xaac10<br><img src="/img/2025-5-17/58.png"><br>且所有函数的代码，均落在 第一份dump数据中（的末尾）</p>
+<p>因此把它扔进010Editor，先改基址为内存中的地址，来到 0xaac10处<br><img src="/img/2025-5-17/59.png"><br>然后将基址改回，这样就得到 代码在dump文件中的起始偏移<br><img src="/img/2025-5-17/60.png"><br>再IDAPython从文件读取数据，写到 0xaac10内存处</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> ida_bytes</span><br><span class="line"><span class="keyword">import</span> ida_idaapi</span><br><span class="line"><span class="keyword">import</span> ida_segment</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">patch_from_file</span>(<span class="params">file_path, file_offset, ida_address, size=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(file_path, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            f.seek(file_offset)</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> size <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                data = f.read()</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                data = f.read(size)</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">for</span> i, byte <span class="keyword">in</span> <span class="built_in">enumerate</span>(data):</span><br><span class="line">            ida_bytes.patch_byte(ida_address + i, byte)</span><br><span class="line">            </span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;successful: from file 0x<span class="subst">&#123;file_offset:x&#125;</span> read <span class="subst">&#123;<span class="built_in">len</span>(data)&#125;</span> bytes, write at address 0x<span class="subst">&#123;ida_address:x&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">        </span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;error: <span class="subst">&#123;<span class="built_in">str</span>(e)&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">file_path = <span class="string">r&quot;..\dump\memcpy_0x76000-0xAFBC0.bin&quot;</span></span><br><span class="line">file_offset = <span class="number">0x34c10</span>   <span class="comment"># 代码在dump文件中的起始偏移</span></span><br><span class="line">ida_address = <span class="number">0xaac10</span>   <span class="comment"># 写到.bss中的内存地址</span></span><br><span class="line"></span><br><span class="line">patch_from_file(file_path, file_offset, ida_address)</span><br></pre></td></tr></table></figure>
+
+<p>此时f5，便能如愿以偿地显示出 各函数的代码逻辑了<br>然而期间函数用到的数据（原so的 .rodata, .data, .got节等）在.bss节中仍缺失<br>于是干脆在 <em>入口分析 2.3</em> 中hook ptr_JNI_OnLoad()的脚本上添逻辑，把此时 libmenuliteapks.so 的.bss节全给dump下来</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">hook_JNI_OnLoad2</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> targetAddress = <span class="title class_">Module</span>.<span class="title function_">findBaseAddress</span>(<span class="string">&quot;libmenuliteapks.so&quot;</span>).<span class="title function_">add</span>(<span class="number">0x42574</span>);    <span class="comment">// BLR X2</span></span><br><span class="line"></span><br><span class="line">    <span class="title class_">Interceptor</span>.<span class="title function_">attach</span>(targetAddress, &#123;</span><br><span class="line">        <span class="attr">onEnter</span>: <span class="keyword">function</span> (<span class="params">args</span>) &#123;</span><br><span class="line">            <span class="keyword">const</span> x2Value = <span class="variable language_">this</span>.<span class="property">context</span>.<span class="property">x2</span>;</span><br><span class="line">            <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`[Register] X2 = <span class="subst">$&#123;x2Value&#125;</span>`</span>);  <span class="comment">// 原so的 JNI_OnLoad()的地址</span></span><br><span class="line"></span><br><span class="line">            <span class="title class_">Interceptor</span>.<span class="title function_">attach</span>(x2Value, &#123;</span><br><span class="line">                <span class="attr">onEnter</span>: <span class="keyword">function</span>(<span class="params">args</span>) &#123;</span><br><span class="line">                    <span class="comment">// dump .bss节</span></span><br><span class="line">                    <span class="keyword">const</span> libBase = <span class="title class_">Module</span>.<span class="title function_">findBaseAddress</span>(<span class="string">&quot;libmenuliteapks.so&quot;</span>);</span><br><span class="line">                    <span class="keyword">const</span> startAddr = libBase.<span class="title function_">add</span>(<span class="number">0x74A70</span>);</span><br><span class="line">                    <span class="keyword">const</span> endAddr = libBase.<span class="title function_">add</span>(<span class="number">0xBD718</span>);</span><br><span class="line">                    <span class="keyword">const</span> dumpSize = endAddr.<span class="title function_">sub</span>(startAddr).<span class="title function_">toUInt32</span>(); </span><br><span class="line"></span><br><span class="line">                    <span class="keyword">try</span> &#123;</span><br><span class="line">                        <span class="keyword">const</span> memDump = <span class="title class_">Memory</span>.<span class="title function_">readByteArray</span>(startAddr, dumpSize);</span><br><span class="line">                        <span class="keyword">const</span> filePath = <span class="string">&quot;/data/data/jp.garud.ssimulator/bss.bin&quot;</span>;</span><br><span class="line">                        <span class="keyword">const</span> file = <span class="keyword">new</span> <span class="title class_">File</span>(filePath, <span class="string">&quot;wb&quot;</span>);</span><br><span class="line">                        file.<span class="title function_">write</span>(memDump);</span><br><span class="line">                        file.<span class="title function_">close</span>();</span><br><span class="line">                        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`[+] successfully dump to <span class="subst">$&#123;filePath&#125;</span>`</span>);</span><br><span class="line">                    &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">                        <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`[!] dump error: <span class="subst">$&#123;e&#125;</span>`</span>);</span><br><span class="line">                    &#125;</span><br><span class="line">                    </span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="attr">onLeave</span>: <span class="keyword">function</span>(<span class="params">retval</span>) &#123;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="attr">onLeave</span>: <span class="keyword">function</span> (<span class="params">retval</span>) &#123;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>不过这么干，部分重定位信息还是处于未修复状态，伪代码中看不见库函数<br><img src="/img/2025-5-17/68.png"><br>问题不大，毕竟绝大部分逻辑是在Dex-VMP中，所以对于现存逻辑，调用库函数的地方很少<br>将这些地址汇总一下，在上方dump前依次读取、传入DebugSymbol.fromAddress()即可<br>以下为地址值在 libmenuliteapks.so中的位置，及其对应库函数</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">0xB29F8：libc.so!__stack_chk_fail</span><br><span class="line">0xB2A08：libc.so!malloc</span><br><span class="line">0xB2A10：libc.so!free</span><br><span class="line">0xB2A18：libprotectliteapks.so!vmInterpret</span><br><span class="line">0xB2A50：libprotectliteapks.so!cacheInitial</span><br></pre></td></tr></table></figure>
+<p>这些库函数在当前 libmenuliteapks.so（壳so）的Imports表中肯定是看不到的<br>毕竟从 <em>入口分析 2.2</em> 中可知，原so的符号信息只在实际运行时才出现在内存，并作为壳so 符号信息的一部分存在</p>
+<h5 id="函数分析"><a href="#函数分析" class="headerlink" title="函数分析"></a>函数分析</h5><p>这里基于功能 将众多函数划分为三类，并按照实际执行顺序 逐一展示</p>
+<ol>
+<li>原so的 JNI_OnLoad()</li>
+</ol>
+<p>动态注册 menuprotect.classesInit0()<br><img src="/img/2025-5-17/67.png"></p>
+<ol start="2">
+<li>menuprotect.classesInit0()</li>
+</ol>
+<p>java层中触发类加载时，位于其静态初始块中的 classesInit0()会被调用<br><img src="/img/2025-5-17/69.png"></p>
+<p>其中基于传参（类编号），从 加壳期间就生成的class, method, string表中提取数据，对指定类下所有native方法 进行动态注册<br><img src="/img/2025-5-17/66.png"><br>之前有分析过nmmp壳的话 其实可以看出，从这里开始，DexVMP本身的逻辑就几乎没遭到魔改了（可能也没啥操作空间）</p>
+<ol start="3">
+<li>各native化的方法</li>
+</ol>
+<p>这里展示 悬浮窗菜单的入口方法 Main.Start()<br>和原版nmmp一致，其中逻辑已被替换，先后进行 虚拟寄存器的初始化，方法字节码信息、工具类函数表指针压栈<br><img src="/img/2025-5-17/70.jpg"></p>
+<p>最终进入 位于libprotectliteapks.so中的DexVMP入口函数 vmInterpret()<br>本质上是一个基于goto结构的解释器<br><img src="/img/2025-5-17/71.jpg"></p>
+<p><em>函数分析 2.</em> 中也提到，DexVMP本身的逻辑与原版并无二致<br>因此对于具体脱壳过程，这里不再赘述。感兴趣的话，可移步至同系列下另一篇《nmmp DexVMP壳分析》</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>LITEAPKS官方 制作破解版游戏的流程，<br>横向上，一般分为三大工序：</p>
+<ol>
+<li>绕过licensecheck：<br>通过修改 AndroidManifest.xml中的特定标签及属性</li>
+<li>插入悬浮窗菜单：<br>通过修改smali，在游戏启动的生命周期方法中插入自己的 悬浮窗初始化逻辑，而后重打包<br>菜单的核心篡改功能在native层实现，涉及And64InlineHook框架</li>
+<li>去除签名校验：<br>使用MT管理器提供的现成功能，即ApkSignatureKillerEx</li>
+</ol>
+<p>纵向上，破解功能也在不断演进，主要体现在：</p>
+<ol>
+<li>优化悬浮窗视觉效果</li>
+<li>强化加固手段：<br>java层涉及BlackObfuscator、名称混淆、字符串混淆；<br>native层涉及字符串混淆、节加密、自实现linker、魔改nmmp。<br>与传统加固壳相比，其实还可以采取 基于地址表的库函数调用、添加frida检测 等手段</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://Matchstick135.github.io">Ms135</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://matchstick135.github.io/2025/05/17/2025-5-17%20LITEAPKS%E7%A0%B4%E8%A7%A3%E7%89%88%E6%B8%B8%E6%88%8F%E5%88%86%E6%9E%90/">https://matchstick135.github.io/2025/05/17/2025-5-17%20LITEAPKS%E7%A0%B4%E8%A7%A3%E7%89%88%E6%B8%B8%E6%88%8F%E5%88%86%E6%9E%90/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://Matchstick135.github.io" target="_blank">Ms135's Blog</a>！</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/2025-5-17.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related full-width" href="/2025/05/01/2025-5-1%20FART%E8%84%9A%E6%9C%AC%E7%A7%BB%E6%A4%8DAndroid10/" title="FART脚本移植Android10"><img class="cover" src="/img/2025-5-1.jpg" onerror="onerror=null;src='/null'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">FART脚本移植Android10</div></div><div class="info-2"><div class="info-item-1">久闻寒冰大佬的FART之大名，却从亲眼见识过其厉害，着实为一大遗憾FART提供了两种使用方式：1.刷入镜像 2.使用脚本在此记录 选择第二种方式，并在此基础上修改脚本实现Android 10移植的过程 还有一点要说明，脚本有两种实现：1.基于hook的 frida_fart_hook.js 2.基于反射的 frida_fart_reflection.js这里选择前者，至于后者的移植之后有空再进行 移植过程 针对spawn注入时的 arguments报错  123C:\Users\Dyl&gt;frida -U -f com.ninemax.ncsearchnew -l D:\Dyl\MyGameSecurity\Tools\Mobile\FART\FART-master\frida_fart\frida_fart\frida_fart_hook.js --no-pauseusage: frida [options] targetfrida: error: unrecognized arguments: --no-pause 省略新版frida已不支持的...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/%E5%A4%B4%E5%83%8F.jpg" onerror="this.onerror=null;this.src='/null'" alt="avatar"/></div><div class="author-info-name">Ms135</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">49</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">7</div></a></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%B7%E6%9C%AC-I"><span class="toc-number">1.</span> <span class="toc-text">样本 I</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%82%E5%AF%9F"><span class="toc-number">1.1.</span> <span class="toc-text">观察</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%9E%90"><span class="toc-number">1.2.</span> <span class="toc-text">分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#licensecheck%E7%BB%95%E8%BF%87"><span class="toc-number">1.2.1.</span> <span class="toc-text">licensecheck绕过</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%82%AC%E6%B5%AE%E7%AA%97%E8%8F%9C%E5%8D%95%E6%8F%92%E5%85%A5"><span class="toc-number">1.2.2.</span> <span class="toc-text">悬浮窗菜单插入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#java%E5%B1%82"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">java层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#native%E5%B1%82"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">native层</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%B7%E6%9C%AC-II"><span class="toc-number">2.</span> <span class="toc-text">样本 II</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%82%E5%AF%9F-1"><span class="toc-number">2.1.</span> <span class="toc-text">观察</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%9E%90-1"><span class="toc-number">2.2.</span> <span class="toc-text">分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%82%AC%E6%B5%AE%E7%AA%97%E8%8F%9C%E5%8D%95%E6%8F%92%E5%85%A5-1"><span class="toc-number">2.2.1.</span> <span class="toc-text">悬浮窗菜单插入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#java%E5%B1%82-1"><span class="toc-number">2.2.1.1.</span> <span class="toc-text">java层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#native%E5%B1%82-1"><span class="toc-number">2.2.1.2.</span> <span class="toc-text">native层</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AD%BE%E5%90%8D%E6%A0%A1%E9%AA%8C%E5%8E%BB%E9%99%A4"><span class="toc-number">2.2.2.</span> <span class="toc-text">签名校验去除</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%B7%E6%9C%AC-III"><span class="toc-number">3.</span> <span class="toc-text">样本 III</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%82%E5%AF%9F-2"><span class="toc-number">3.1.</span> <span class="toc-text">观察</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%86%E6%9E%90-2"><span class="toc-number">3.2.</span> <span class="toc-text">分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#licensecheck%E7%BB%95%E8%BF%87-1"><span class="toc-number">3.2.1.</span> <span class="toc-text">licensecheck绕过</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AD%BE%E5%90%8D%E6%A0%A1%E9%AA%8C%E5%8E%BB%E9%99%A4-1"><span class="toc-number">3.2.2.</span> <span class="toc-text">签名校验去除</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%82%AC%E6%B5%AE%E7%AA%97%E8%8F%9C%E5%8D%95%E6%8F%92%E5%85%A5-2"><span class="toc-number">3.2.3.</span> <span class="toc-text">悬浮窗菜单插入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#java%E5%B1%82-2"><span class="toc-number">3.2.3.1.</span> <span class="toc-text">java层</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#native%E5%B1%82-2"><span class="toc-number">3.2.3.2.</span> <span class="toc-text">native层</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%89%8D%E6%9C%9F%E8%A7%82%E5%AF%9F"><span class="toc-number">3.2.3.2.1.</span> <span class="toc-text">前期观察</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%85%A5%E5%8F%A3%E5%88%86%E6%9E%90"><span class="toc-number">3.2.3.2.2.</span> <span class="toc-text">入口分析</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E7%8E%B0%E5%BD%A2"><span class="toc-number">3.2.3.2.3.</span> <span class="toc-text">函数现形</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%87%BD%E6%95%B0%E5%88%86%E6%9E%90"><span class="toc-number">3.2.3.2.4.</span> <span class="toc-text">函数分析</span></a></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol></div></div><div class="card-widget card-post-series"><div class="item-headline"><i class="fa-solid fa-layer-group"></i><span>系列文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2025/05/17/2025-5-17%20LITEAPKS%E7%A0%B4%E8%A7%A3%E7%89%88%E6%B8%B8%E6%88%8F%E5%88%86%E6%9E%90/" title="LITEAPKS破解版游戏分析"><img src="/img/2025-5-17.jpg" onerror="this.onerror=null;this.src='/null'" alt="LITEAPKS破解版游戏分析"></a><div class="content"><a class="title" href="/2025/05/17/2025-5-17%20LITEAPKS%E7%A0%B4%E8%A7%A3%E7%89%88%E6%B8%B8%E6%88%8F%E5%88%86%E6%9E%90/" title="LITEAPKS破解版游戏分析">LITEAPKS破解版游戏分析</a><time datetime="2025-05-16T16:00:00.000Z" title="发表于 2025-05-17 00:00:00">2025-05-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2025/03/15/2025-3-15%20nmmp%20DexVMP%E5%A3%B3%E5%88%86%E6%9E%90%EF%BC%88%E6%9C%AA%E5%AE%8C%EF%BC%89/" title="nmmp DexVMP壳分析"><img src="/img/2025-3-15.jpg" onerror="this.onerror=null;this.src='/null'" alt="nmmp DexVMP壳分析"></a><div class="content"><a class="title" href="/2025/03/15/2025-3-15%20nmmp%20DexVMP%E5%A3%B3%E5%88%86%E6%9E%90%EF%BC%88%E6%9C%AA%E5%AE%8C%EF%BC%89/" title="nmmp DexVMP壳分析">nmmp DexVMP壳分析</a><time datetime="2025-03-14T16:00:00.000Z" title="发表于 2025-03-15 00:00:00">2025-03-15</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
